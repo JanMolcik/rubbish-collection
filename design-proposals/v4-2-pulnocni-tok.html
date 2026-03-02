@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V4.2 — Půlnoční Tok | Svoz odpadů Lípa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── THEME: Půlnoční Tok (Midnight Flow) — DARK ──────
+       bg:         #060f1e  deep navy
+       bg-card:    #0d1a2e
+       primary:    #0ea5e9  sky blue    — on bg ≈ 7.2:1 ✓ AA
+       accent:     #22d3ee  cyan        — on bg ≈ 9.1:1 ✓
+       text:       #e8f2ff              — on bg ≈ 17:1 ✓
+       text-dim:   #7aabcf              — on bg ≈ 5.5:1 ✓ AA
+       today-bg:   #0ea5e9
+       today-fg:   #001828             — dark on blue ≈ 7.2:1 ✓
+    ─────────────────────────────────────────────────────── */
+    :root {
+      --bg:        #060f1e;
+      --bg-card:   #0d1a2e;
+      --bg-stripe: #101f32;
+      --primary:   #0ea5e9;
+      --primary-fg:#001828;
+      --accent:    #22d3ee;
+      --text:      #e8f2ff;
+      --text-dim:  #7aabcf;
+      --border:    #1a2e48;
+      --border-lt: #14243a;
+      --cell-sep:  #111f33;
+      --today-bg:  #0ea5e9;
+      --today-fg:  #001828;
+      --hero-bg:   #020810;
+      --hero-text: #e8f2ff;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Horizontal scanline texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 3px,
+        rgba(0,100,200,0.02) 3px, rgba(0,100,200,0.02) 4px
+      );
+      z-index: 0;
+    }
+
+    .page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+
+    /* ── TOP BAR ───────────────────────────────────────── */
+    .topbar {
+      background: var(--hero-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0.55rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-brand {
+      font-family: 'Anton', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      color: var(--primary);
+    }
+
+    .topbar-sub {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+
+    /* ── HERO ──────────────────────────────────────────── */
+    .hero {
+      background: var(--hero-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 1rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 100% 0%, #0ea5e914, transparent 55%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-body {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem 1rem;
+      align-items: start;
+    }
+
+    .hero-lead {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+      color: #ffffff;
+    }
+
+    .hero-date {
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--text-dim);
+      margin-top: 0.3rem;
+    }
+
+    .hero-count { text-align: center; }
+
+    .hero-num {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(2.8rem, 10vw, 4.5rem);
+      line-height: 1;
+      color: var(--accent);
+      text-shadow: 0 0 30px rgba(34,211,238,0.4);
+    }
+
+    .hero-unit {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* Category strip */
+    .hero-cats {
+      padding: 0.65rem 1rem;
+      background: var(--bg-card);
+      border-bottom: 2px solid var(--primary);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .hero-cats-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-right: 0.2rem;
+    }
+
+    .cat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 0.22rem 0.65rem;
+      border-radius: 4px;
+      border: 1px solid;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .cat-badge-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── CALENDAR ──────────────────────────────────────── */
+    .calendar { background: var(--bg); }
+
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      background: var(--bg-card);
+    }
+
+    .view-switch {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .view-btn {
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 0.42rem 0.85rem;
+      cursor: pointer;
+      border-right: 1px solid var(--border);
+      min-height: 40px;
+      transition: all 0.12s;
+    }
+
+    .view-btn:last-child { border-right: none; }
+    .view-btn.active { background: var(--primary); color: var(--primary-fg); font-weight: 700; }
+    .view-btn:hover:not(.active) { background: var(--bg-stripe); color: var(--text); }
+
+    .nav-row { display: flex; align-items: center; gap: 0.5rem; }
+
+    .nav-btn {
+      width: 36px; height: 36px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.12s;
+      flex-shrink: 0;
+    }
+
+    .nav-btn:hover { background: var(--primary); border-color: var(--primary); color: var(--primary-fg); }
+
+    .nav-btn svg {
+      width: 15px; height: 15px;
+      stroke: currentColor; stroke-width: 2.2;
+      fill: none; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .interval-lbl {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-align: center;
+      min-width: 130px;
+    }
+
+    /* ── iOS-STYLE MONTH GRID ──────────────────────────── */
+    .weekday-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .weekday-lbl {
+      text-align: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 0.45rem 0;
+    }
+
+    .weekday-lbl.weekend { color: var(--accent); }
+
+    .month-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+
+    .month-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5px 2px 7px;
+      min-height: 54px;
+      border-bottom: 0.5px solid var(--cell-sep);
+      cursor: pointer;
+      transition: background 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .month-cell:active { background: var(--bg-stripe); }
+    .month-cell.selected { background: var(--bg-stripe); }
+
+    .cell-num {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .month-cell.today .cell-num {
+      background: var(--today-bg);
+      color: var(--today-fg);
+      font-weight: 700;
+    }
+
+    .month-cell.weekend .cell-num { color: var(--text-dim); }
+    .month-cell.other-month { opacity: 0.25; }
+
+    .cell-pills {
+      display: flex;
+      gap: 2px;
+      justify-content: center;
+      min-height: 5px;
+      overflow: hidden;
+      max-width: 90%;
+    }
+
+    .cell-pill {
+      display: block;
+      width: 7px; height: 4px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Detail panel */
+    .day-detail {
+      padding: 0.9rem 1rem;
+      border-top: 2px solid var(--primary);
+      background: var(--bg-card);
+      min-height: 70px;
+    }
+
+    .detail-header {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.55rem;
+    }
+
+    .detail-list { display: grid; gap: 0.4rem; }
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.55rem 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border-lt);
+      border-left: 3px solid;
+    }
+
+    .detail-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .detail-empty { font-size: 0.82rem; color: var(--text-dim); font-style: italic; }
+
+    /* ── WEEK VIEW ─────────────────────────────────────── */
+    .week-grid { display: grid; gap: 0; }
+
+    .week-row {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      border-bottom: 1px solid var(--border-lt);
+      min-height: 56px;
+    }
+
+    .week-row.today-row { background: var(--bg-stripe); }
+
+    .week-date-col {
+      border-right: 1px solid var(--border);
+      padding: 0.6rem 0.7rem;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+    }
+
+    .wk-short { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+    .wk-num { font-family: 'Anton', sans-serif; font-size: 1.6rem; line-height: 1; color: var(--text); }
+    .week-row.today-row .wk-num { color: var(--primary); }
+    .week-row.today-row .wk-short { color: var(--primary); }
+
+    .week-cats-col {
+      padding: 0.6rem 0.8rem;
+      display: flex; flex-wrap: wrap; align-content: center; gap: 0.3rem;
+    }
+
+    .week-badge {
+      font-size: 0.72rem; font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      border: 1px solid;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .week-empty { font-size: 0.76rem; color: var(--text-dim); font-style: italic; align-self: center; }
+
+    /* ── DAY VIEW ──────────────────────────────────────── */
+    .day-panel { padding: 1.2rem 1rem; }
+
+    .day-title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.4rem, 5vw, 2.2rem);
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+    }
+
+    .day-list { display: grid; gap: 0.4rem; list-style: none; }
+
+    .day-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid var(--border-lt);
+      border-left: 3px solid;
+      background: var(--bg-card);
+    }
+
+    .day-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+    .day-name { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+    .day-empty { font-size: 0.84rem; color: var(--text-dim); font-style: italic; }
+
+    /* ── LEGEND ────────────────────────────────────────── */
+    .legend {
+      border-top: 1px solid var(--border);
+      padding: 0.7rem 1rem;
+      background: var(--bg-card);
+      display: flex; flex-wrap: wrap; gap: 0.4rem 1rem;
+    }
+
+    .leg-item {
+      display: flex; align-items: center; gap: 0.35rem;
+      font-size: 0.7rem; font-weight: 600; color: var(--text-dim);
+    }
+
+    .leg-pill { width: 10px; height: 5px; border-radius: 2.5px; flex-shrink: 0; }
+
+    /* ── DESKTOP ───────────────────────────────────────── */
+    @media (min-width: 680px) {
+      .hero { padding: 1.8rem 2rem 1.5rem; }
+      .hero-num { font-size: 5rem; }
+      .hero-cats { padding: 0.8rem 2rem; }
+      .cal-header { padding: 0.75rem 1.5rem; }
+      .month-cell { min-height: 68px; padding: 6px 0 10px; }
+      .cell-num { width: 36px; height: 36px; font-size: 16px; }
+      .cell-pill { width: 9px; height: 5px; }
+      .day-detail { padding: 1rem 1.5rem; }
+      .week-row { min-height: 62px; }
+      .day-panel { padding: 1.5rem 2rem; }
+      .legend { padding: 0.75rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <span class="topbar-brand">LÍPA — SVOZ ODPADŮ</span>
+    <span class="topbar-sub">2026</span>
+  </div>
+
+  <div class="hero">
+    <p class="hero-label">Nejbližší svoz</p>
+    <div class="hero-body" id="hero-body"></div>
+  </div>
+  <div class="hero-cats" id="hero-cats"></div>
+
+  <section class="calendar">
+    <div class="cal-header">
+      <div class="view-switch">
+        <button class="view-btn active" data-view="month" onclick="switchView('month')">Měsíc</button>
+        <button class="view-btn" data-view="week" onclick="switchView('week')">Týden</button>
+        <button class="view-btn" data-view="day" onclick="switchView('day')">Den</button>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="navigate(-1)" aria-label="Předchozí">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <p class="interval-lbl" id="interval-lbl"></p>
+        <button class="nav-btn" onclick="navigate(1)" aria-label="Další">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="cal-body" id="cal-body"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+</div>
+<script>
+// Dark theme: use lightened category colors for text on dark background
+// Each color checked: min 4.5:1 contrast on --bg #060f1e
+const cats={
+  komunalni: {name:'Komunální odpad', color:'#ff8a70'},  // warm orange — on #060f1e ≈ 8.5:1 ✓
+  plasty:    {name:'Plasty',           color:'#7db8ff'},  // blue — on dark ≈ 7.8:1 ✓
+  papir:     {name:'Papír a lepenka',  color:'#d4a870'},  // tan — on dark ≈ 6.2:1 ✓
+  sklo:      {name:'Sklo',             color:'#50d4a0'},  // mint green ≈ 9.2:1 ✓
+  kovy:      {name:'Kovy',             color:'#9ab0d8'},  // slate blue ≈ 6.8:1 ✓
+  oleje:     {name:'Oleje a tuky',     color:'#f0c860'},  // gold ≈ 10:1 ✓
+  nebezpecny:{name:'Nebezpečný odpad', color:'#d490d4'},  // lavender ≈ 6.5:1 ✓
+};
+
+const events={
+  '2026-01-05':['komunalni','plasty'],
+  '2026-01-08':['sklo'],
+  '2026-01-12':['komunalni'],
+  '2026-01-15':['sklo'],
+  '2026-01-19':['komunalni','plasty','papir'],
+  '2026-01-22':['sklo','kovy'],
+  '2026-01-26':['komunalni'],
+  '2026-01-29':['sklo','nebezpecny'],
+  '2026-02-02':['komunalni','plasty'],
+  '2026-02-09':['komunalni'],
+  '2026-02-12':['sklo','kovy'],
+  '2026-02-16':['komunalni','plasty','papir'],
+};
+
+const TODAY=new Date(2026,0,14);
+const CZ_LONG=['Neděle','Pondělí','Úterý','Středa','Čtvrtek','Pátek','Sobota'];
+const CZ_LONG_UP=['NEDĚLE','PONDĚLÍ','ÚTERÝ','STŘEDA','ČTVRTEK','PÁTEK','SOBOTA'];
+const CZ_MON=['LEDEN','ÚNOR','BŘEZEN','DUBEN','KVĚTEN','ČERVEN','ČERVENEC','SRPEN','ZÁŘÍ','ŘÍJEN','LISTOPAD','PROSINEC'];
+const CZ_MON_G=['ledna','února','března','dubna','května','června','července','srpna','září','října','listopadu','prosince'];
+
+function toISO(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
+function addDays(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r;}
+function getWeekStart(d){return addDays(d,-((d.getDay()+6)%7));}
+function getCats(d){return(events[toISO(d)]||[]).map(id=>cats[id]).filter(Boolean);}
+
+let view='month',cursor=new Date(TODAY),selectedDate=new Date(TODAY);
+
+function switchView(v){view=v;document.querySelectorAll('.view-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v));render();}
+function navigate(dir){
+  if(view==='month') cursor=new Date(cursor.getFullYear(),cursor.getMonth()+dir,1);
+  else if(view==='week') cursor=addDays(cursor,dir*7);
+  else cursor=addDays(cursor,dir);
+  render();
+}
+function intervalLabel(){
+  if(view==='month') return`${CZ_MON[cursor.getMonth()]} ${cursor.getFullYear()}`;
+  if(view==='week'){const ws=getWeekStart(cursor),we=addDays(ws,6);return`${ws.getDate()}.–${we.getDate()}. ${CZ_MON_G[we.getMonth()]}`;}
+  return`${CZ_LONG_UP[cursor.getDay()]} ${cursor.getDate()}.`;
+}
+function renderHero(){
+  const today=toISO(TODAY),next=Object.keys(events).sort().find(d=>d>=today);
+  if(!next)return;
+  const d=new Date(next),diff=Math.round((d-TODAY)/86400000);
+  const lead=diff===0?'DNES':diff===1?'ZÍTRA':`${CZ_LONG_UP[d.getDay()]}`;
+  const cs=(events[next]||[]).map(id=>cats[id]).filter(Boolean);
+  document.getElementById('hero-body').innerHTML=`
+    <div>
+      <p class="hero-lead">${lead}<br>${d.getDate()}. ${CZ_MON_G[d.getMonth()]} ${d.getFullYear()}</p>
+      <p class="hero-date">${CZ_LONG[d.getDay()]}</p>
+    </div>
+    <div class="hero-count"><p class="hero-num">${diff}</p><p class="hero-unit">dní</p></div>
+  `;
+  const catEl=document.getElementById('hero-cats');
+  catEl.innerHTML=`<span class="hero-cats-label">Typ:</span>`;
+  cs.forEach(c=>{
+    catEl.innerHTML+=`<span class="cat-badge" style="border-color:${c.color}40;color:${c.color}">
+      <span class="cat-badge-dot" style="background:${c.color}"></span>${c.name}
+    </span>`;
+  });
+}
+function renderLegend(){
+  document.getElementById('legend').innerHTML=Object.entries(cats).map(([,c])=>
+    `<span class="leg-item"><span class="leg-pill" style="background:${c.color}"></span>${c.name}</span>`
+  ).join('');
+}
+function selectDate(d){
+  selectedDate=d;
+  document.querySelectorAll('.month-cell').forEach(el=>el.classList.toggle('selected',el.dataset.iso===toISO(d)));
+  renderDayDetail(d);
+}
+function renderDayDetail(d){
+  const cs=getCats(d), el=document.querySelector('.day-detail');
+  if(!el)return;
+  el.querySelector('.detail-header').textContent=`${CZ_LONG[d.getDay()]} ${d.getDate()}. ${CZ_MON_G[d.getMonth()]}`;
+  const list=el.querySelector('.detail-list');
+  list.innerHTML=cs.length
+    ? cs.map(c=>`<div class="detail-item" style="border-left-color:${c.color}"><span class="detail-name">${c.name}</span></div>`).join('')
+    : `<p class="detail-empty">Bez svozu.</p>`;
+}
+function renderMonth(){
+  const ms=new Date(cursor.getFullYear(),cursor.getMonth(),1),gs=getWeekStart(ms);
+  const me=new Date(cursor.getFullYear(),cursor.getMonth()+1,0);
+  let ge=addDays(me,(7-((me.getDay()+6)%7+1))%7);if(ge<me)ge=addDays(ge,7);
+  const WD=['Po','Út','St','Čt','Pá','So','Ne'];
+  let html=`<div class="weekday-row">`;
+  WD.forEach((d,i)=>html+=`<div class="weekday-lbl${i>=5?' weekend':''}">${d}</div>`);
+  html+=`</div><div class="month-grid">`;
+  let d=new Date(gs);
+  while(d<=ge){
+    const iso=toISO(d),isToday=sameDay(d,TODAY),isCur=d.getMonth()===cursor.getMonth();
+    const dow=(d.getDay()+6)%7,isWE=dow>=5;
+    const cs=getCats(d),isSel=sameDay(d,selectedDate);
+    let cls='month-cell';
+    if(isToday)cls+=' today';else if(isWE)cls+=' weekend';
+    if(!isCur)cls+=' other-month';
+    if(isSel)cls+=' selected';
+    html+=`<div class="${cls}" data-iso="${iso}" onclick="selectDate(new Date('${iso}'))">
+      <div class="cell-num">${d.getDate()}</div>
+      <div class="cell-pills">${cs.slice(0,4).map(c=>`<span class="cell-pill" style="background:${c.color}"></span>`).join('')}</div>
+    </div>`;
+    d=addDays(d,1);
+  }
+  html+=`</div><div class="day-detail"><p class="detail-header"></p><div class="detail-list"></div></div>`;
+  return html;
+}
+function renderWeek(){
+  const ws=getWeekStart(cursor);const WD=['Po','Út','St','Čt','Pá','So','Ne'];
+  let html='';
+  for(let i=0;i<7;i++){
+    const d=addDays(ws,i),isToday=sameDay(d,TODAY),cs=getCats(d),dow=(d.getDay()+6)%7;
+    html+=`<div class="week-row${isToday?' today-row':''}">
+      <div class="week-date-col"><p class="wk-short">${WD[dow]}</p><p class="wk-num">${d.getDate()}</p></div>
+      <div class="week-cats-col">${cs.length
+        ?cs.map(c=>`<span class="week-badge" style="color:${c.color};border-color:${c.color}40">${c.name}</span>`).join('')
+        :`<span class="week-empty">Bez svozu</span>`}</div>
+    </div>`;
+  }
+  return`<div class="week-grid">${html}</div>`;
+}
+function renderDay(){
+  const cs=getCats(cursor);
+  return`<div class="day-panel">
+    <p class="day-title">${CZ_LONG_UP[cursor.getDay()]} ${cursor.getDate()}. ${CZ_MON[cursor.getMonth()]} ${cursor.getFullYear()}</p>
+    ${cs.length
+      ?`<ul class="day-list">${cs.map(c=>`<li class="day-item" style="border-left-color:${c.color}">
+          <span class="day-swatch" style="background:${c.color}"></span>
+          <span class="day-name">${c.name}</span></li>`).join('')}</ul>`
+      :`<p class="day-empty">V tento den není naplánovaný svoz.</p>`}
+  </div>`;
+}
+function render(){
+  document.getElementById('interval-lbl').textContent=intervalLabel();
+  const b=document.getElementById('cal-body');
+  if(view==='month'){b.innerHTML=renderMonth();renderDayDetail(selectedDate);}
+  else if(view==='week')b.innerHTML=renderWeek();
+  else b.innerHTML=renderDay();
+}
+renderHero();renderLegend();render();
+</script>
+</body>
+</html>
