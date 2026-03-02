@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Hind } from "next/font/google";
+import { Anton, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const display = Cormorant_Garamond({
+const display = Anton({
   subsets: ["latin", "latin-ext"],
   variable: "--font-display",
-  weight: ["500", "600", "700"],
+  weight: "400",
 });
 
-const body = Hind({
+const body = DM_Sans({
   subsets: ["latin", "latin-ext"],
   variable: "--font-body",
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
