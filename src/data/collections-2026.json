@@ -9,32 +9,32 @@
     {
       "id": "komunalni-odpad",
       "name": "Komunální odpad",
-      "color": "#ce5a3a"
+      "color": "#2f3338"
     },
     {
       "id": "plasty",
       "name": "Plasty",
-      "color": "#2e6ee8"
+      "color": "#9c7a00"
     },
     {
       "id": "papir",
       "name": "Papír",
-      "color": "#a57b4d"
+      "color": "#2f6fcc"
     },
     {
       "id": "sklo",
       "name": "Sklo",
-      "color": "#1c8f6a"
+      "color": "#2a9a48"
     },
     {
       "id": "kovy",
       "name": "Kovové obaly",
-      "color": "#525f7f"
+      "color": "#8f98a3"
     },
     {
       "id": "oleje",
       "name": "Jedlé oleje a tuky",
-      "color": "#b48a26"
+      "color": "#8c4a33"
     },
     {
       "id": "nebezpecny-odpad",

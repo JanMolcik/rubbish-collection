@@ -8,12 +8,12 @@ const wasteCalendarConfig: WasteCalendarConfig = {
   homePickupCategoryIds: ["komunalni-odpad", "sko", "plasty", "papir"],
   heroPriorityCategoryIds: ["komunalni-odpad", "sko", "plasty", "papir"],
   darkCategoryColors: {
-    "komunalni-odpad": "#ff8a70",
-    plasty: "#7db8ff",
-    papir: "#d4a870",
-    sklo: "#50d4a0",
-    kovy: "#9ab0d8",
-    oleje: "#f0c860",
+    "komunalni-odpad": "#c6ced9",
+    plasty: "#f0c94a",
+    papir: "#79b3ff",
+    sklo: "#6bdc88",
+    kovy: "#d0d6de",
+    oleje: "#d08d74",
     "nebezpecny-odpad": "#d490d4",
   },
 };
