@@ -28,6 +28,18 @@
   isolation: isolate;
 }
 
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .shell[data-theme="dark"] {
   --bg: #060f1e;
   --bg-card: #0d1a2e;
@@ -96,6 +108,7 @@
 }
 
 .topbarBrand {
+  margin: 0;
   font-size: 0.95rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -146,6 +159,17 @@
 
 .themeToggle:hover {
   transform: rotate(18deg) scale(1.08);
+}
+
+.themeToggle:focus-visible,
+.viewButton:focus-visible,
+.viewButtonActive:focus-visible,
+.navButton:focus-visible,
+.monthCell:focus-visible,
+.monthCellToday:focus-visible,
+.monthCellMuted:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .sunIcon,
@@ -655,6 +679,8 @@
 }
 
 .legend {
+  margin: 0;
+  list-style: none;
   border-top: 1px solid var(--border);
   padding: 0.7rem 1rem;
   background: var(--bg-card);
