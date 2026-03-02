@@ -62,7 +62,7 @@ function intervalLabel(view: ViewMode, cursorDate: Date): string {
     return `${format(weekStart, "d. M.", { locale: cs })} - ${format(weekEnd, "d. M. yyyy", { locale: cs })}`;
   }
 
-  return format(cursorDate, "EEEE d. LLLL yyyy", { locale: cs });
+  return format(cursorDate, "EEEE d. MMMM yyyy", { locale: cs });
 }
 
 function nextCursorDate(view: ViewMode, cursorDate: Date, direction: "next" | "prev") {
@@ -192,7 +192,7 @@ export function WasteCollectionApp({ data }: { data: WasteDataset }) {
           <div className={styles.heroCard}>
             <div>
               <p className={styles.heroLead}>{heroData.leadText}</p>
-              <p className={styles.heroDate}>{format(heroData.nearestDate, "EEEE, d. LLLL", { locale: cs })}</p>
+              <p className={styles.heroDate}>{format(heroData.nearestDate, "EEEE, d. MMMM", { locale: cs })}</p>
             </div>
             <div className={styles.heroMeta}>
               {heroData.daysUntil === 0 ? "Dnes" : `${heroData.daysUntil} dní`}
@@ -303,7 +303,7 @@ export function WasteCollectionApp({ data }: { data: WasteDataset }) {
 
         {view === "day" && (
           <article className={styles.dayPanel}>
-            <p className={styles.dayPanelDate}>{format(dayCell.date, "EEEE d. LLLL yyyy", { locale: cs })}</p>
+            <p className={styles.dayPanelDate}>{format(dayCell.date, "EEEE d. MMMM yyyy", { locale: cs })}</p>
             {dayCell.categories.length ? (
               <ul className={styles.dayPanelList}>
                 {dayCell.categories.map((category) => (

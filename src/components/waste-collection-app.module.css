@@ -369,7 +369,20 @@
     border-radius: 14px;
   }
 
+  .navBlock {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem;
+    align-items: center;
+  }
+
   .intervalLabel {
+    width: 100%;
+    grid-column: 1 / -1;
+    order: -1;
+  }
+
+  .navButton {
     width: 100%;
   }
 }

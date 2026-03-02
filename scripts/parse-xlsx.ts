@@ -223,11 +223,13 @@ function extractDateTokens(text: string, defaultYear: number): string[] {
 function normalizeCategoryLabel(text: string): string {
   return normalizeText(
     text
+      .replace(createDatePattern(), " ")
       .replace(/^term[ií]ny\s+svozu\s+/i, "")
       .replace(/^svoz\s+/i, "")
       .replace(/\s+\d+x\s+za.*$/i, "")
       .replace(/\s+po\s+cel[yý]\s+rok.*$/i, "")
       .replace(/\s+zvony.*$/i, "")
+      .replace(/[,:;.-]+$/g, "")
       .replace(/\s{2,}/g, " "),
   );
 }
@@ -511,6 +513,10 @@ async function main() {
   }
 
   for (const dateCell of dateCells) {
+    if (dateCell.isDecorative && !dateCell.knownCategory) {
+      continue;
+    }
+
     const directLabel = chooseBestLabel(dateCell, labelCells, false);
     const contextKnown = chooseBestLabel(dateCell, knownLabelCells, true);
 
