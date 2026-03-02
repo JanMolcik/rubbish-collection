@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# rubbish-collection
 
-## Getting Started
+Webová aplikace pro přehled svozu odpadů v obci Lípa.
 
-First, run the development server:
+- Hero sekce s nejbližším svozem (dnes/zítra/datum)
+- Kalendářové pohledy: den, týden, měsíc
+- Lokální parser XLSX -> JSON pro roční aktualizaci
+
+## Lokální spuštění
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aplikace běží na [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Aktualizace dat na další rok
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Stáhnout nový XLSX rozpis.
+2. Spustit parser:
 
-## Learn More
+```bash
+npm run parse:xlsx -- \
+  --input '/ABS/PATH/novy-rozpis.xlsx' \
+  --output 'src/data/collections-2026.json' \
+  --municipality 'Lípa' \
+  --region 'Zlínský kraj' \
+  --year 2026
+```
 
-To learn more about Next.js, take a look at the following resources:
+3. Ověřit kvalitu:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Commit + push.
 
-## Deploy on Vercel
+## Skripty
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `npm run dev` - development server
+- `npm run lint` - ESLint
+- `npm run typecheck` - TypeScript kontrola
+- `npm run build` - produkční build
+- `npm run parse:xlsx` - lokální parser XLSX -> JSON
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Dokumentace
+
+- Detailní specifikace: `docs/SPECIFICATION.md`
+- Security audit: `docs/SECURITY-AUDIT.md`

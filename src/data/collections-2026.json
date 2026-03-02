@@ -1,0 +1,517 @@
+{
+  "municipality": "Lípa",
+  "region": "Zlínský kraj",
+  "year": 2026,
+  "sourceFile": "Lípa.xlsx",
+  "generatedAt": "2026-03-02T10:09:04.690Z",
+  "parserVersion": "1.0.0",
+  "categories": [
+    {
+      "id": "komunalni-odpad",
+      "name": "Komunální odpad",
+      "color": "#ce5a3a"
+    },
+    {
+      "id": "plasty",
+      "name": "Plasty",
+      "color": "#2e6ee8"
+    },
+    {
+      "id": "papir",
+      "name": "Papír",
+      "color": "#a57b4d"
+    },
+    {
+      "id": "sklo",
+      "name": "Sklo",
+      "color": "#1c8f6a"
+    },
+    {
+      "id": "kovy",
+      "name": "Kovové obaly",
+      "color": "#525f7f"
+    },
+    {
+      "id": "oleje",
+      "name": "Jedlé oleje a tuky",
+      "color": "#b48a26"
+    },
+    {
+      "id": "nebezpecny-odpad",
+      "name": "Nebezpečný odpad",
+      "color": "#7f2f75"
+    }
+  ],
+  "events": [
+    {
+      "date": "2026-01-02",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-01-05",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-01-13",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-01-15",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-01-19",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-01-23",
+      "categories": [
+        "papir"
+      ]
+    },
+    {
+      "date": "2026-01-29",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-02-02",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-02-10",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-02-12",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-02-16",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-02-26",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-03-02",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-03-10",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-03-12",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-03-16",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-03-20",
+      "categories": [
+        "papir"
+      ]
+    },
+    {
+      "date": "2026-03-26",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-03-30",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-04-08",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-04-10",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-04-13",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-04-23",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-04-27",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-05-05",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-05-07",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-05-11",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-05-15",
+      "categories": [
+        "papir"
+      ]
+    },
+    {
+      "date": "2026-05-21",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-05-25",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-06-04",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-06-08",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-06-10",
+      "categories": [
+        "nebezpecny-odpad"
+      ]
+    },
+    {
+      "date": "2026-06-18",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-06-22",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-06-30",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-07-02",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-07-10",
+      "categories": [
+        "papir"
+      ]
+    },
+    {
+      "date": "2026-07-16",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-07-20",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-07-28",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-07-30",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-08-13",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-08-25",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-09-04",
+      "categories": [
+        "papir"
+      ]
+    },
+    {
+      "date": "2026-09-10",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-09-14",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-09-24",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-10-08",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-10-30",
+      "categories": [
+        "papir"
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "categories": [
+        "nebezpecny-odpad"
+      ]
+    },
+    {
+      "date": "2026-11-19",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-11-23",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-12-03",
+      "categories": [
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-12-07",
+      "categories": [
+        "komunalni-odpad"
+      ]
+    },
+    {
+      "date": "2026-12-15",
+      "categories": [
+        "oleje"
+      ]
+    },
+    {
+      "date": "2026-12-17",
+      "categories": [
+        "plasty",
+        "sklo"
+      ]
+    },
+    {
+      "date": "2026-12-21",
+      "categories": [
+        "komunalni-odpad",
+        "kovy"
+      ]
+    },
+    {
+      "date": "2026-12-31",
+      "categories": [
+        "sklo"
+      ]
+    }
+  ]
+}
