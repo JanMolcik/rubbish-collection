@@ -28,6 +28,7 @@ export type HeroData = {
 export type WasteCalendarConfig = {
   themeStorageKey: string;
   selectedDateStorageKey: string;
+  selectedDateMaxAgeHours: number;
   homePickupCategoryIds: string[];
   heroPriorityCategoryIds: string[];
   darkCategoryColors: Record<string, string>;

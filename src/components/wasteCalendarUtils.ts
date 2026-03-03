@@ -1,4 +1,5 @@
 import {
+  addHours,
   addDays,
   addMonths,
   addWeeks,
@@ -114,24 +115,66 @@ export function isHomePickupCategory(categoryId: string, homePickupCategoryIds: 
   return homePickupCategoryIds.includes(categoryId);
 }
 
-export function readStoredDate(storageKey: string): Date | null {
+type StoredDatePayload = {
+  date: string;
+  savedAt: string;
+};
+
+function isValidDate(date: Date): boolean {
+  return !Number.isNaN(date.getTime());
+}
+
+export function readStoredDate(storageKey: string, maxAgeHours: number): Date | null {
   if (typeof window === "undefined") {
     return null;
   }
 
-  const storedDate = window.localStorage.getItem(storageKey);
+  const storedValue = window.localStorage.getItem(storageKey);
 
-  if (!storedDate) {
+  if (!storedValue) {
     return null;
   }
 
-  const parsed = parseISO(storedDate);
+  const now = new Date();
+  const safeMaxAgeHours = maxAgeHours > 0 ? maxAgeHours : 1;
 
-  if (Number.isNaN(parsed.getTime())) {
+  try {
+    const payload = JSON.parse(storedValue) as Partial<StoredDatePayload>;
+
+    if (typeof payload.date !== "string" || typeof payload.savedAt !== "string") {
+      return null;
+    }
+
+    const parsedDate = parseISO(payload.date);
+    const savedAt = parseISO(payload.savedAt);
+
+    if (!isValidDate(parsedDate) || !isValidDate(savedAt)) {
+      return null;
+    }
+
+    if (addHours(savedAt, safeMaxAgeHours).getTime() <= now.getTime()) {
+      return null;
+    }
+
+    return startOfDay(parsedDate);
+  } catch {
+    // Legacy values were plain ISO dates without timestamp metadata.
+    // Skip restoring to avoid ambiguous expiry behavior.
     return null;
   }
+}
 
-  return startOfDay(parsed);
+export function writeStoredDate(storageKey: string, selectedDate: Date): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const payload: StoredDatePayload = {
+    date: toIsoDate(selectedDate),
+    savedAt: new Date().toISOString(),
+  };
+
+  window.localStorage.setItem(storageKey, JSON.stringify(payload));
 }
 
 export function readStoredTheme(storageKey: string): ThemeMode | null {

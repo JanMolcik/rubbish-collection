@@ -28,6 +28,42 @@
   isolation: isolate;
 }
 
+.embedShell {
+  min-height: auto;
+  padding: 0;
+  background: transparent;
+}
+
+.embedShell .backgroundTexture {
+  display: none;
+}
+
+.embedShell .page {
+  max-width: none;
+  box-shadow: none;
+}
+
+.embedCompact .topbar {
+  min-height: 42px;
+  padding: 0.48rem 0.72rem;
+}
+
+.embedCompact .hero {
+  padding: 0.92rem 0.72rem 0.66rem;
+}
+
+.embedCompact .calendarHeader {
+  padding: 0.52rem 0.72rem;
+}
+
+.embedCompact .legend {
+  padding: 0.55rem 0.72rem;
+}
+
+.embedCompact .intervalLabel {
+  font-size: clamp(1rem, 2.7vw, 1.25rem);
+}
+
 .srOnly {
   position: absolute;
   width: 1px;

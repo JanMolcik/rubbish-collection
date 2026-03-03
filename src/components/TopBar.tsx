@@ -5,10 +5,12 @@ export function TopBar({
   year,
   theme,
   onToggleTheme,
+  showThemeToggle = true,
 }: {
   year: number;
   theme: ThemeMode;
   onToggleTheme: () => void;
+  showThemeToggle?: boolean;
 }) {
   const toggleLabel = theme === "dark" ? "Přepnout na světlé téma" : "Přepnout na tmavé téma";
 
@@ -19,20 +21,22 @@ export function TopBar({
       </p>
       <div className={styles.topbarRight}>
         <span className={styles.topbarYear}>{year}</span>
-        <button
-          type="button"
-          className={styles.themeToggle}
-          onClick={onToggleTheme}
-          aria-label={toggleLabel}
-          aria-pressed={theme === "dark"}
-        >
-          <span className={styles.sunIcon} aria-hidden>
-            ☀
-          </span>
-          <span className={styles.moonIcon} aria-hidden>
-            ☾
-          </span>
-        </button>
+        {showThemeToggle && (
+          <button
+            type="button"
+            className={styles.themeToggle}
+            onClick={onToggleTheme}
+            aria-label={toggleLabel}
+            aria-pressed={theme === "dark"}
+          >
+            <span className={styles.sunIcon} aria-hidden>
+              ☀
+            </span>
+            <span className={styles.moonIcon} aria-hidden>
+              ☾
+            </span>
+          </button>
+        )}
       </div>
     </header>
   );

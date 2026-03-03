@@ -30,6 +30,7 @@ import {
   readStoredTheme,
   sortCategoriesByPriority,
   toIsoDate,
+  writeStoredDate,
 } from "@/components/wasteCalendarUtils";
 
 type WasteCalendarController = {
@@ -46,12 +47,26 @@ type WasteCalendarController = {
   handleNavigate: (direction: "next" | "prev") => void;
   handleMonthSelect: (date: Date, isCurrentMonth: boolean) => void;
   toggleTheme: () => void;
+  canToggleTheme: boolean;
 };
 
-export function useWasteCalendarController(data: WasteDataset): WasteCalendarController {
+type UseWasteCalendarOptions = {
+  initialView?: ViewMode;
+  forcedTheme?: ThemeMode | null;
+};
+
+export function useWasteCalendarController(
+  data: WasteDataset,
+  options?: UseWasteCalendarOptions,
+): WasteCalendarController {
   const config = useWasteCalendarConfig();
-  const [view, setView] = useState<ViewMode>("month");
+  const forcedTheme = options?.forcedTheme ?? null;
+  const [view, setView] = useState<ViewMode>(options?.initialView ?? "month");
   const [theme, setTheme] = useState<ThemeMode>(() => {
+    if (forcedTheme) {
+      return forcedTheme;
+    }
+
     const storedTheme = readStoredTheme(config.themeStorageKey);
 
     if (storedTheme) {
@@ -99,11 +114,14 @@ export function useWasteCalendarController(data: WasteDataset): WasteCalendarCon
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    window.localStorage.setItem(config.themeStorageKey, theme);
-  }, [config.themeStorageKey, theme]);
+
+    if (!forcedTheme) {
+      window.localStorage.setItem(config.themeStorageKey, theme);
+    }
+  }, [config.themeStorageKey, forcedTheme, theme]);
 
   useEffect(() => {
-    const restoredDate = readStoredDate(config.selectedDateStorageKey);
+    const restoredDate = readStoredDate(config.selectedDateStorageKey, config.selectedDateMaxAgeHours);
     hasRestoredSelection.current = true;
 
     if (!restoredDate) {
@@ -114,14 +132,14 @@ export function useWasteCalendarController(data: WasteDataset): WasteCalendarCon
       setSelectedDate(restoredDate);
       setCursorDate(restoredDate);
     });
-  }, [config.selectedDateStorageKey]);
+  }, [config.selectedDateMaxAgeHours, config.selectedDateStorageKey]);
 
   useEffect(() => {
     if (!hasRestoredSelection.current) {
       return;
     }
 
-    window.localStorage.setItem(config.selectedDateStorageKey, toIsoDate(selectedDate));
+    writeStoredDate(config.selectedDateStorageKey, selectedDate);
   }, [config.selectedDateStorageKey, selectedDate]);
 
   const heroData = useMemo(() => {
@@ -233,8 +251,12 @@ export function useWasteCalendarController(data: WasteDataset): WasteCalendarCon
   }, []);
 
   const toggleTheme = useCallback(() => {
+    if (forcedTheme) {
+      return;
+    }
+
     setTheme((currentTheme) => (currentTheme === "light" ? "dark" : "light"));
-  }, []);
+  }, [forcedTheme]);
 
   return {
     view,
@@ -250,5 +272,6 @@ export function useWasteCalendarController(data: WasteDataset): WasteCalendarCon
     handleNavigate,
     handleMonthSelect,
     toggleTheme,
+    canToggleTheme: !forcedTheme,
   };
 }

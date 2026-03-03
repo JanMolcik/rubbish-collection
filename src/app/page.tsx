@@ -1,22 +1,6 @@
 import { WasteCalendar, WasteCalendarConfigProvider } from "@/components";
-import type { WasteCalendarConfig } from "@/components";
+import { wasteCalendarConfig } from "@/lib/waste-calendar-config";
 import { getWasteDataset } from "@/lib/waste-data";
-
-const wasteCalendarConfig: WasteCalendarConfig = {
-  themeStorageKey: "lipa-theme",
-  selectedDateStorageKey: "lipa-selected-date",
-  homePickupCategoryIds: ["komunalni-odpad", "sko", "plasty", "papir"],
-  heroPriorityCategoryIds: ["komunalni-odpad", "sko", "plasty", "papir"],
-  darkCategoryColors: {
-    "komunalni-odpad": "#c6ced9",
-    plasty: "#f0c94a",
-    papir: "#79b3ff",
-    sklo: "#6bdc88",
-    kovy: "#d0d6de",
-    oleje: "#d08d74",
-    "nebezpecny-odpad": "#d490d4",
-  },
-};
 
 export default function Home() {
   const dataset = getWasteDataset();
