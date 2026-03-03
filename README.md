@@ -10,6 +10,7 @@ Webová aplikace pro přehled svozu odpadů v obci Lípa.
 
 ```bash
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
@@ -46,6 +47,16 @@ npm run build
 - `npm run typecheck` - TypeScript kontrola
 - `npm run build` - produkční build
 - `npm run parse:xlsx` - lokální parser XLSX -> JSON
+
+## Security hardening
+
+- Runtime security hlavičky a CSP jsou v [`src/proxy.ts`](src/proxy.ts).
+- Pro embed routu nastavte v produkci `NEXT_PUBLIC_EMBED_FRAME_ANCESTORS` na whitelist domén místo `*`.
+- CI security guardrails:
+  - CodeQL: `.github/workflows/security.yml`
+  - Secret scan (Gitleaks): `.github/workflows/secret-scan.yml`
+  - Dependabot: `.github/dependabot.yml`
+  - Policy a disclosure: `SECURITY.md`
 
 ## Dokumentace
 
