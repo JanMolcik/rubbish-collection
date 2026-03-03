@@ -1,6 +1,14 @@
 import { WasteCalendar, WasteCalendarConfigProvider } from "@/components";
+import type { AppFooterLink } from "@/components";
 import { wasteCalendarConfig } from "@/lib/waste-calendar-config";
 import { getWasteDataset } from "@/lib/waste-data";
+
+const FOOTER_COPYRIGHT_NAME = "Mgr. Jan Molčík";
+const FOOTER_LINKS: AppFooterLink[] = [
+  { label: "GitHub", url: "https://github.com/JanMolcik" },
+  { label: "LinkedIn", url: "https://www.linkedin.com/in/jan-molcik/" },
+  { label: "Portfolio", url: "https://janmolcik.com/" },
+];
 
 export default function Home() {
   const dataset = getWasteDataset();
@@ -37,7 +45,7 @@ export default function Home() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(datasetJsonLd) }} />
       <WasteCalendarConfigProvider config={wasteCalendarConfig}>
-        <WasteCalendar data={dataset} />
+        <WasteCalendar data={dataset} footerCopyrightName={FOOTER_COPYRIGHT_NAME} footerLinks={FOOTER_LINKS} />
       </WasteCalendarConfigProvider>
     </>
   );

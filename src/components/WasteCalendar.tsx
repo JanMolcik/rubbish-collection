@@ -1,6 +1,8 @@
 "use client";
 
 import type { WasteDataset } from "@/lib/waste-types";
+import { AppFooter } from "@/components/AppFooter";
+import type { AppFooterLink } from "@/components/AppFooter";
 import { CalendarHeader } from "@/components/CalendarHeader";
 import { DayView } from "@/components/DayView";
 import { HeroSection } from "@/components/HeroSection";
@@ -20,6 +22,8 @@ type WasteCalendarProps = {
   showHero?: boolean;
   showLegend?: boolean;
   compact?: boolean;
+  footerCopyrightName?: string;
+  footerLinks?: AppFooterLink[];
 };
 
 export function WasteCalendar({
@@ -30,6 +34,8 @@ export function WasteCalendar({
   showHero = true,
   showLegend = true,
   compact = false,
+  footerCopyrightName = "Mgr. Jan Molčík",
+  footerLinks = [{ label: "GitHub", url: "https://github.com/JanMolcik" }],
 }: WasteCalendarProps) {
   const {
     view,
@@ -88,6 +94,8 @@ export function WasteCalendar({
 
           {showLegend && <Legend categories={data.categories} resolveCategoryColor={resolveCategoryColorByTheme} />}
         </section>
+
+        {mode === "full" && <AppFooter copyrightName={footerCopyrightName} links={footerLinks} />}
       </div>
     </main>
   );

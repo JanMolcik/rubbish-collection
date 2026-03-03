@@ -741,6 +741,49 @@
   flex-shrink: 0;
 }
 
+.appFooter {
+  border-top: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 0.6rem 1rem 0.72rem;
+  display: grid;
+  gap: 0.28rem;
+  justify-items: center;
+}
+
+.appFooterText {
+  margin: 0;
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+
+.appFooterLinks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.32rem 0.74rem;
+}
+
+.appFooterLink {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-underline-offset: 2px;
+  transition: opacity 0.12s ease;
+}
+
+.appFooterLink:hover {
+  opacity: 0.78;
+}
+
+.appFooterLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
 @media (min-width: 680px) {
   .topbar {
     padding: 0.58rem 1.5rem;
@@ -773,6 +816,10 @@
 
   .legend {
     padding: 0.75rem 1.5rem;
+  }
+
+  .appFooter {
+    padding: 0.65rem 1.5rem 0.76rem;
   }
 }
 
@@ -876,5 +923,21 @@
 
   .legendItem {
     font-size: 0.67rem;
+  }
+
+  .appFooter {
+    padding: 0.52rem 0.6rem 0.62rem;
+  }
+
+  .appFooterText {
+    font-size: 0.66rem;
+  }
+
+  .appFooterLinks {
+    gap: 0.24rem 0.58rem;
+  }
+
+  .appFooterLink {
+    font-size: 0.66rem;
   }
 }
