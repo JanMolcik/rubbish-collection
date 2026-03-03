@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Anton, DM_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const display = Anton({
@@ -94,7 +95,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="cs">
-      <body className={`${display.variable} ${body.variable}`}>{children}</body>
+      <body className={`${display.variable} ${body.variable}`}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
