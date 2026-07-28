@@ -11,11 +11,13 @@ export function MonthView({
   selected,
   onSelectDate,
   resolveCategoryColor,
+  showInlineDetail = true,
 }: {
   cells: DaySummary[];
   selected: SelectedDaySummary;
   onSelectDate: (date: Date, isCurrentMonth: boolean) => void;
   resolveCategoryColor: ResolveCategoryColor;
+  showInlineDetail?: boolean;
 }) {
   return (
     <div className={styles.monthScroller}>
@@ -62,24 +64,26 @@ export function MonthView({
         })}
       </div>
 
-      <div className={styles.monthDetail}>
-        <p className={styles.monthDetailHeader}>{format(selected.date, "EEEE d. MMMM", { locale: cs })}</p>
-        {selected.categories.length ? (
-          <div className={styles.monthDetailList}>
-            {selected.categories.map((category) => (
-              <div
-                key={`month-detail-${selected.isoDate}-${category.id}`}
-                className={styles.monthDetailItem}
-                style={{ borderLeftColor: resolveCategoryColor(category) }}
-              >
-                {categoryLabel(category)}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className={styles.emptyState}>Bez svozu.</p>
-        )}
-      </div>
+      {showInlineDetail && (
+        <div className={styles.monthDetail}>
+          <p className={styles.monthDetailHeader}>{format(selected.date, "EEEE d. MMMM", { locale: cs })}</p>
+          {selected.categories.length ? (
+            <div className={styles.monthDetailList}>
+              {selected.categories.map((category) => (
+                <div
+                  key={`month-detail-${selected.isoDate}-${category.id}`}
+                  className={styles.monthDetailItem}
+                  style={{ borderLeftColor: resolveCategoryColor(category) }}
+                >
+                  {categoryLabel(category)}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className={styles.emptyState}>Bez svozu.</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

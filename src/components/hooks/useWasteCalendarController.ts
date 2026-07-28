@@ -1,16 +1,14 @@
 import {
   addDays,
-  differenceInCalendarDays,
   endOfMonth,
   endOfWeek,
   isSameDay,
   isSameMonth,
-  parseISO,
   startOfDay,
   startOfMonth,
   startOfWeek,
 } from "date-fns";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { WasteCategory, WasteDataset } from "@/lib/waste-types";
 import { useWasteCalendarConfig } from "@/components/WasteCalendarConfigProvider";
 import { resolveCategoryColor } from "@/components/wasteCalendarTheme";
@@ -23,12 +21,10 @@ import type {
   ViewMode,
 } from "@/components/wasteCalendarTypes";
 import {
-  isHomePickupCategory,
-  leadForDate,
+  buildHeroData,
   nextCursorDate,
   readStoredDate,
   readStoredTheme,
-  sortCategoriesByPriority,
   toIsoDate,
   writeStoredDate,
 } from "@/components/wasteCalendarUtils";
@@ -81,7 +77,7 @@ export function useWasteCalendarController(
   });
   const [selectedDate, setSelectedDate] = useState<Date>(startOfDay(new Date()));
   const [cursorDate, setCursorDate] = useState<Date>(startOfDay(new Date()));
-  const hasRestoredSelection = useRef(false);
+  const [hasExplicitSelection, setHasExplicitSelection] = useState(false);
 
   const today = useMemo(() => startOfDay(new Date()), []);
 
@@ -122,7 +118,6 @@ export function useWasteCalendarController(
 
   useEffect(() => {
     const restoredDate = readStoredDate(config.selectedDateStorageKey, config.selectedDateMaxAgeHours);
-    hasRestoredSelection.current = true;
 
     if (!restoredDate) {
       return;
@@ -131,35 +126,29 @@ export function useWasteCalendarController(
     queueMicrotask(() => {
       setSelectedDate(restoredDate);
       setCursorDate(restoredDate);
+      setHasExplicitSelection(true);
     });
   }, [config.selectedDateMaxAgeHours, config.selectedDateStorageKey]);
 
-  useEffect(() => {
-    if (!hasRestoredSelection.current) {
-      return;
-    }
-
-    writeStoredDate(config.selectedDateStorageKey, selectedDate);
-  }, [config.selectedDateStorageKey, selectedDate]);
-
   const heroData = useMemo(() => {
-    const nearest = sortedEventDates.find((isoDate) => isoDate >= toIsoDate(today));
-
-    if (!nearest) {
-      return null;
-    }
-
-    const nearestDate = parseISO(nearest);
-    const categories = sortCategoriesByPriority(eventsByDate.get(nearest) ?? [], config.heroPriorityCategoryIds);
-
-    return {
-      nearestDate,
-      leadText: leadForDate(nearestDate, today),
-      daysUntil: differenceInCalendarDays(nearestDate, today),
-      homePickup: categories.filter((category) => isHomePickupCategory(category.id, config.homePickupCategoryIds)),
-      stationPickup: categories.filter((category) => !isHomePickupCategory(category.id, config.homePickupCategoryIds)),
-    };
-  }, [config.heroPriorityCategoryIds, config.homePickupCategoryIds, eventsByDate, sortedEventDates, today]);
+    return buildHeroData({
+      selectedDate,
+      today,
+      hasExplicitSelection,
+      eventsByDate,
+      sortedEventDates,
+      priorityCategoryIds: config.heroPriorityCategoryIds,
+      homePickupCategoryIds: config.homePickupCategoryIds,
+    });
+  }, [
+    config.heroPriorityCategoryIds,
+    config.homePickupCategoryIds,
+    eventsByDate,
+    hasExplicitSelection,
+    selectedDate,
+    sortedEventDates,
+    today,
+  ]);
 
   const monthCells = useMemo(() => {
     const monthStart = startOfMonth(cursorDate);
@@ -231,24 +220,26 @@ export function useWasteCalendarController(
   }, [selectedDate]);
 
   const handleNavigate = useCallback((direction: "next" | "prev") => {
-    setCursorDate((currentCursorDate) => {
-      const nextDate = nextCursorDate(view, currentCursorDate, direction);
+    const nextDate = nextCursorDate(view, cursorDate, direction);
+    setCursorDate(nextDate);
 
-      if (view !== "month") {
-        setSelectedDate(startOfDay(nextDate));
-      }
-
-      return nextDate;
-    });
-  }, [view]);
+    if (view !== "month") {
+      const normalizedDate = startOfDay(nextDate);
+      setSelectedDate(normalizedDate);
+      setHasExplicitSelection(true);
+      writeStoredDate(config.selectedDateStorageKey, normalizedDate);
+    }
+  }, [config.selectedDateStorageKey, cursorDate, view]);
 
   const handleMonthSelect = useCallback((date: Date, isCurrentMonth: boolean) => {
     setSelectedDate(date);
+    setHasExplicitSelection(true);
+    writeStoredDate(config.selectedDateStorageKey, date);
 
     if (!isCurrentMonth) {
       setCursorDate(date);
     }
-  }, []);
+  }, [config.selectedDateStorageKey]);
 
   const toggleTheme = useCallback(() => {
     if (forcedTheme) {

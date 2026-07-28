@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     "komunální odpad",
     "plasty",
     "papír",
-    "sklo",
+    "nebezpečný odpad",
     "odpadový harmonogram",
   ],
   authors: [{ name: "Obec Lípa" }],

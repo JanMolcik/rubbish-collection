@@ -378,6 +378,29 @@
   color: var(--hero-dim);
 }
 
+.heroNextPickup {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.72rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(160, 204, 170, 0.32);
+}
+
+.heroNextDate {
+  margin: 0.2rem 0 0;
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.heroNoNext {
+  position: relative;
+  z-index: 1;
+  margin: 0.7rem 0 0;
+  color: var(--hero-dim);
+  font-size: 0.78rem;
+}
+
 .calendarPanel {
   background: var(--bg);
 }
@@ -824,6 +847,56 @@
 }
 
 @media (max-width: 680px) {
+  .page {
+    overflow: visible;
+  }
+
+  .hero {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 0.72rem 0.62rem 0.58rem;
+    box-shadow: 0 5px 16px rgba(6, 15, 30, 0.2);
+  }
+
+  .heroLabel {
+    margin-bottom: 0.32rem;
+  }
+
+  .heroLead {
+    font-size: clamp(1.55rem, 8vw, 2.1rem);
+  }
+
+  .heroDate {
+    margin-top: 0.18rem;
+    font-size: 0.82rem;
+  }
+
+  .heroWeekday {
+    display: none;
+  }
+
+  .heroNum {
+    font-size: clamp(2.2rem, 12vw, 3.1rem);
+  }
+
+  .heroTypes,
+  .heroNextPickup {
+    margin-top: 0.42rem;
+  }
+
+  .heroTypesRow {
+    margin-top: 0.25rem;
+  }
+
+  .heroNextPickup {
+    padding-top: 0.42rem;
+  }
+
+  .heroNextDate {
+    font-size: 0.78rem;
+  }
+
   .calendarHeader {
     padding: 0.52rem 0.55rem;
     gap: 0.38rem;
