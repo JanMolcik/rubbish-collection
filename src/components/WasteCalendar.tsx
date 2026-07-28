@@ -83,6 +83,7 @@ export function WasteCalendar({
               selected={selectedMonthCell}
               onSelectDate={handleMonthSelect}
               resolveCategoryColor={resolveCategoryColorByTheme}
+              showInlineDetail={!showHero}
             />
           )}
 

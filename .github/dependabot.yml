@@ -11,6 +11,7 @@ updates:
           - "react"
           - "react-dom"
     ignore:
+      # Next 16.2.12 still bundles plugins that only support ESLint through v9.
       - dependency-name: "eslint"
         versions:
           - ">=10"

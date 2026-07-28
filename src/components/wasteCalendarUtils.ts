@@ -15,7 +15,7 @@ import {
 } from "date-fns";
 import { cs } from "date-fns/locale";
 import type { WasteCategory } from "@/lib/waste-types";
-import type { ThemeMode, ViewMode } from "@/components/wasteCalendarTypes";
+import type { HeroData, HeroPickupData, ThemeMode, ViewMode } from "@/components/wasteCalendarTypes";
 
 export function toIsoDate(date: Date): string {
   return format(date, "yyyy-MM-dd");
@@ -71,7 +71,15 @@ export function categoryLabel(category: WasteCategory): string {
 }
 
 export function daysLabel(days: number): string {
-  return days === 1 ? "den" : "dní";
+  if (days === 1) {
+    return "den";
+  }
+
+  if (days >= 2 && days <= 4) {
+    return "dny";
+  }
+
+  return "dní";
 }
 
 export function leadForDate(targetDate: Date, now: Date): string {
@@ -113,6 +121,100 @@ export function sortCategoriesByPriority(categories: WasteCategory[], priorityCa
 
 export function isHomePickupCategory(categoryId: string, homePickupCategoryIds: string[]): boolean {
   return homePickupCategoryIds.includes(categoryId);
+}
+
+type BuildHeroDataOptions = {
+  selectedDate: Date;
+  today: Date;
+  hasExplicitSelection: boolean;
+  eventsByDate: Map<string, WasteCategory[]>;
+  sortedEventDates: string[];
+  priorityCategoryIds: string[];
+  homePickupCategoryIds: string[];
+};
+
+function buildPickupData(
+  isoDate: string,
+  today: Date,
+  eventsByDate: Map<string, WasteCategory[]>,
+  priorityCategoryIds: string[],
+  homePickupCategoryIds: string[],
+): HeroPickupData {
+  const date = parseISO(isoDate);
+  const categories = sortCategoriesByPriority(eventsByDate.get(isoDate) ?? [], priorityCategoryIds);
+
+  return {
+    date,
+    daysUntil: differenceInCalendarDays(date, today),
+    homePickup: categories.filter((category) => isHomePickupCategory(category.id, homePickupCategoryIds)),
+    stationPickup: categories.filter((category) => !isHomePickupCategory(category.id, homePickupCategoryIds)),
+  };
+}
+
+export function buildHeroData({
+  selectedDate,
+  today,
+  hasExplicitSelection,
+  eventsByDate,
+  sortedEventDates,
+  priorityCategoryIds,
+  homePickupCategoryIds,
+}: BuildHeroDataOptions): HeroData | null {
+  const selectedIsoDate = toIsoDate(selectedDate);
+
+  if (!hasExplicitSelection) {
+    const nearestIsoDate = sortedEventDates.find((isoDate) => isoDate >= toIsoDate(today));
+
+    if (!nearestIsoDate) {
+      return null;
+    }
+
+    const pickup = buildPickupData(
+      nearestIsoDate,
+      today,
+      eventsByDate,
+      priorityCategoryIds,
+      homePickupCategoryIds,
+    );
+
+    return {
+      mode: "nearest",
+      displayDate: pickup.date,
+      leadText: leadForDate(pickup.date, today),
+      pickup,
+      nextPickup: null,
+    };
+  }
+
+  const selectedCategories = eventsByDate.get(selectedIsoDate) ?? [];
+
+  if (selectedCategories.length > 0) {
+    return {
+      mode: "selected",
+      displayDate: selectedDate,
+      leadText: "SVOZ",
+      pickup: buildPickupData(
+        selectedIsoDate,
+        today,
+        eventsByDate,
+        priorityCategoryIds,
+        homePickupCategoryIds,
+      ),
+      nextPickup: null,
+    };
+  }
+
+  const nextIsoDate = sortedEventDates.find((isoDate) => isoDate > selectedIsoDate);
+
+  return {
+    mode: "selected",
+    displayDate: selectedDate,
+    leadText: "BEZ SVOZU",
+    pickup: null,
+    nextPickup: nextIsoDate
+      ? buildPickupData(nextIsoDate, today, eventsByDate, priorityCategoryIds, homePickupCategoryIds)
+      : null,
+  };
 }
 
 type StoredDatePayload = {

@@ -17,12 +17,19 @@ export type SelectedDaySummary = {
   categories: WasteCategory[];
 };
 
-export type HeroData = {
-  nearestDate: Date;
-  leadText: string;
+export type HeroPickupData = {
+  date: Date;
   daysUntil: number;
   homePickup: WasteCategory[];
   stationPickup: WasteCategory[];
+};
+
+export type HeroData = {
+  mode: "nearest" | "selected";
+  displayDate: Date;
+  leadText: string;
+  pickup: HeroPickupData | null;
+  nextPickup: HeroPickupData | null;
 };
 
 export type WasteCalendarConfig = {
