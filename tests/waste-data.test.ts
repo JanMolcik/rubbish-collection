@@ -1,13 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getWasteDataset } from "../src/lib/waste-data";
+import { filterVisibleWasteDataset, getWasteDataset } from "../src/lib/waste-data";
+import { wasteCalendarConfig } from "../src/lib/waste-calendar-config";
+import type { WasteDataset } from "../src/lib/waste-types";
 
-const VISIBLE_CATEGORY_IDS = new Set([
-  "komunalni-odpad",
-  "plasty",
-  "papir",
-  "nebezpecny-odpad",
-]);
+const VISIBLE_CATEGORY_IDS = new Set(wasteCalendarConfig.heroPriorityCategoryIds);
 
 test("exposes only household-relevant waste categories at the data boundary", () => {
   const dataset = getWasteDataset();
@@ -38,4 +35,22 @@ test("removes hidden categories from mixed pickup days without removing the rele
   const event = getWasteDataset().events.find(({ date }) => date === "2026-07-30");
 
   assert.deepEqual(event?.categories, ["plasty"]);
+});
+
+test("normalizes legacy SKO category IDs at the data boundary", () => {
+  const legacyDataset: WasteDataset = {
+    municipality: "Lípa",
+    region: "Vysočina",
+    year: 2026,
+    sourceFile: "legacy.xlsx",
+    generatedAt: "2026-01-01T00:00:00.000Z",
+    parserVersion: "legacy",
+    categories: [{ id: "sko", name: "SKO", color: "#111111" }],
+    events: [{ date: "2026-01-05", categories: ["sko"] }],
+  };
+
+  const filtered = filterVisibleWasteDataset(legacyDataset);
+
+  assert.deepEqual(filtered.categories.map(({ id }) => id), ["komunalni-odpad"]);
+  assert.deepEqual(filtered.events[0]?.categories, ["komunalni-odpad"]);
 });
