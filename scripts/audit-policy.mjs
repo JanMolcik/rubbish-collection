@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 
 const ALLOWED_ADVISORY = "GHSA-mh99-v99m-4gvg";
 const ALLOWED_PACKAGE = "brace-expansion";
-const ALLOWED_NODES = ["node_modules/minimatch/node_modules/brace-expansion"];
+const ALLOWED_NODES = ["node_modules/brace-expansion"];
 
 function runAudit(args) {
   const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";

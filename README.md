@@ -53,7 +53,7 @@ npm test
 
 ### Dočasná audit výjimka
 
-`npm run audit:policy` vždy kontroluje produkční i úplný dependency strom. Produkční strom musí být bez nálezů. V devDependencies je dočasně povoleno pouze advisory [`GHSA-mh99-v99m-4gvg`](https://github.com/advisories/GHSA-mh99-v99m-4gvg) na přesné cestě `node_modules/minimatch/node_modules/brace-expansion`; odvozené npm nálezy musí vést pouze k tomuto advisory. Jakýkoli jiný advisory, jiná instalační cesta nebo produkční nález CI zastaví.
+`npm run audit:policy` vždy kontroluje produkční i úplný dependency strom. Produkční strom musí být bez nálezů. V devDependencies je dočasně povoleno pouze advisory [`GHSA-mh99-v99m-4gvg`](https://github.com/advisories/GHSA-mh99-v99m-4gvg) na přesné lockfile cestě `node_modules/brace-expansion`; odvozené npm nálezy musí vést pouze k tomuto advisory. Jakýkoli jiný advisory, jiná instalační cesta nebo produkční nález CI zastaví.
 
 Výjimka existuje proto, že ESLint 9 a pluginy dodané s Next.js 16.2.12 stále používají `minimatch@3`, jehož API není kompatibilní s opraveným `brace-expansion@5`. Nucený globální override proto nepoužíváme. Výjimku odstranit, jakmile kompatibilní ESLint/Next.js plugin stack přestane zranitelnou cestu instalovat.
 
